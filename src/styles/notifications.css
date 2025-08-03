@@ -1,0 +1,199 @@
+/* In-App Notification Styles */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    pointer-events: none;
+    max-width: 400px;
+}
+
+.notification {
+    background: var(--bg-secondary, #2a2a2a);
+    border: 1px solid var(--border-color, #404040);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.notification-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 12px;
+}
+
+.notification-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+}
+
+.notification-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.notification-message {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text-primary, #ffffff);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary, #888888);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0;
+    margin-left: 8px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.notification-close:hover {
+    background: var(--bg-hover, rgba(255, 255, 255, 0.1));
+    color: var(--text-primary, #ffffff);
+}
+
+/* Notification Types */
+.notification-success {
+    border-left: 4px solid #10b981;
+}
+
+.notification-success .notification-icon {
+    color: #10b981;
+}
+
+.notification-error {
+    border-left: 4px solid #ef4444;
+}
+
+.notification-error .notification-icon {
+    color: #ef4444;
+}
+
+.notification-warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.notification-warning .notification-icon {
+    color: #f59e0b;
+}
+
+.notification-info {
+    border-left: 4px solid #3b82f6;
+}
+
+.notification-info .notification-icon {
+    color: #3b82f6;
+}
+
+/* Hover effects */
+.notification:hover {
+    transform: translateX(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .notification-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .notification-content {
+        padding: 12px;
+    }
+    
+    .notification-message {
+        font-size: 13px;
+    }
+}
+
+/* Animation for multiple notifications */
+.notification:nth-child(1) { animation-delay: 0ms; }
+.notification:nth-child(2) { animation-delay: 100ms; }
+.notification:nth-child(3) { animation-delay: 200ms; }
+.notification:nth-child(4) { animation-delay: 300ms; }
+.notification:nth-child(5) { animation-delay: 400ms; }
+
+/* Notification buttons for confirmations */
+.notification-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    justify-content: flex-end;
+}
+
+.notification-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 60px;
+}
+
+.notification-btn-cancel {
+    background: var(--bg-hover, rgba(255, 255, 255, 0.1));
+    color: var(--text-secondary, #888888);
+    border: 1px solid var(--border-color, #404040);
+}
+
+.notification-btn-cancel:hover {
+    background: var(--bg-hover-strong, rgba(255, 255, 255, 0.15));
+    color: var(--text-primary, #ffffff);
+}
+
+.notification-btn-delete {
+    background: #ef4444;
+    color: white;
+}
+
+.notification-btn-delete:hover {
+    background: #dc2626;
+}
+
+.notification-btn:active {
+    transform: translateY(1px);
+}
+
+/* Stacking effect for multiple notifications */
+.notification-container .notification:not(:first-child) {
+    margin-top: -2px;
+    transform: translateX(calc(100% + 4px * var(--stack-index, 0)));
+}
+
+.notification-container .notification:not(:first-child).show {
+    transform: translateX(calc(4px * var(--stack-index, 0)));
+}

@@ -1,0 +1,252 @@
+/* --- Footer / Composer Styles --- */
+.chat-footer{
+  padding:20px 32px 32px;
+  flex-shrink:0;
+  background:transparent;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* Composer container */
+.composer{
+  width:100%;
+  max-width: 700px;
+  margin: 0 auto;
+  background:var(--composer-bg);
+  border:1px solid var(--border-color);
+  border-radius:24px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+  padding:16px 20px 12px;
+}
+
+/* Textarea styled like an input, auto-grow */
+.composer textarea{
+  width:100%;
+  border:none;
+  outline:none;
+  resize:none;
+  max-height:9.5em; /* ~5-6 lines */
+  line-height:1.6;
+  font-size:16px;
+  font-weight:500;
+  color:var(--text-dark);
+  padding:8px 12px 4px;
+  background:transparent;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  letter-spacing:0.01em;
+  transition: all 0.2s ease;
+}
+
+.composer textarea:focus {
+  color: var(--main-blue);
+  font-weight: 600;
+}
+
+.composer textarea::placeholder{
+  color:#9CA3AF;
+  font-weight:400;
+  font-style:italic;
+}
+
+/* Bottom row */
+.composer-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:10px;
+}
+
+/* Brand area bottom-left */
+.brand{
+  background:none;border:none;padding:0;margin:0;
+  color:var(--text-secondary);
+  font-size:13px;display:flex;align-items:center;gap:6px;
+  cursor:default;
+}
+.brand .caret{font-size:12px;opacity:.8}
+
+/* Actions bottom-right */
+.actions{display:flex;align-items:center;gap:10px}
+.actions .attach{
+  width:32px;height:32px;border-radius:8px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.actions .attach:hover{background:#f3f4f6}
+.send-fab{
+  width:40px;height:40px;border-radius:50%;border:none;background:#111;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.2)
+}
+.send-fab:hover{background:#333}
+.send-fab:disabled{opacity:.5;cursor:not-allowed}
+
+/* --- Attachment Preview Styles --- */
+.attachment-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 0;
+}
+
+.attachment-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f8f9fa;
+  border: 1px solid var(--border-color);
+}
+
+.attachment-preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+}
+
+/* Image preview styles */
+.attachment-preview .preview-image {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.attachment-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.attachment-item:hover .attachment-overlay {
+  opacity: 1;
+}
+
+.attachment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.file-size {
+  font-size: 10px;
+  color: rgba(255,255,255,0.8);
+}
+
+.remove-attachment {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.remove-attachment:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* File attachment (non-image) styles */
+.file-attachment {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 180px;
+  background: white;
+}
+
+.file-attachment .attachment-info {
+  color: var(--text-dark);
+}
+
+.file-attachment .file-name {
+  color: var(--text-dark);
+  max-width: 140px;
+}
+
+.file-attachment .file-size {
+  color: var(--text-secondary);
+}
+
+.file-attachment .remove-attachment {
+  background: #f3f4f6;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+.file-attachment .remove-attachment:hover {
+  background: #e5e7eb;
+  color: var(--text-dark);
+}
+
+.file-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+/* Responsive tweaks for composer */
+@media (max-width:520px){
+  .attachment-container {
+    gap: 6px;
+  }
+  
+  .attachment-preview .preview-image {
+    width: 60px;
+    height: 45px;
+  }
+  
+  .file-attachment {
+    min-width: 150px;
+    padding: 6px 10px;
+  }
+  
+  .file-name {
+    max-width: 100px;
+  }
+}
+
+/* Style for the new image generation button */
+.actions .image-gen {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.actions .image-gen:hover {
+    background: #f3f4f6;
+}
+
+/* Dark mode compatibility */
+[data-theme="dark"] .actions .image-gen:hover {
+    background: rgba(255, 255, 255, 0.1);
+}

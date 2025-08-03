@@ -1,0 +1,18 @@
+{
+  "name": "uncensored-ai",
+  "version": "1.0.0",
+  "description": "AI Chat Application",
+  "main": "src/main.js",
+  "scripts": {
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "analyze-imports": "node analyze-imports.js",
+    "serve": "python -m http.server 8000"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "eslint-plugin-import": "^2.29.0"
+  },
+  "type": "module"
+}
