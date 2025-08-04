@@ -2,6 +2,7 @@ import { APP_CONSTANTS } from '../core/constants.js';
 import { getState, setCurrentChatId } from '../core/state.js';
 import { deleteChat } from '../services/chat-service.js';
 import { notificationManager } from './notifications.js';
+import { renderMessage } from './message-renderer.js';
 
 // Mutex for preventing race conditions in chat switching
 let chatSwitchLock = false;
@@ -229,15 +230,15 @@ async function loadChatMessages(chatId) {
     const messages = chats[chatId].messages;
     
     if (messages.length === 0) {
-        await addWelcomeMessage();
+        addWelcomeMessage();
     } else {
         for (const message of messages) {
-            await renderMessage(message);
+            renderMessage(message);
         }
     }
 }
 
-async function addWelcomeMessage() {
+function addWelcomeMessage() {
     const welcomeMessage = {
         sender: 'ai',
         text: 'Welcome To Uncensored AI',
@@ -245,113 +246,7 @@ async function addWelcomeMessage() {
         hasUpgrade: true
     };
     
-    await renderMessage(welcomeMessage);
-}
-
-async function renderMessage(message) {
-    const chatArea = document.getElementById('chatArea');
-    if (!chatArea) return;
-    
-    const wrap = document.createElement('div');
-    wrap.className = 'message-wrapper ' + (message.sender === 'user' ? 'user-message' : 'ai-message');
-    
-    // Create action buttons HTML
-    const actionButtons = `
-        <div class="message-actions">
-            <button class="action-btn" data-action="copy" title="Copy">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-                </svg>
-            </button>
-            <button class="action-btn" data-action="like" title="Like">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M7 10v12l4-4 4 4V10"/>
-                    <path d="M5 6h14l-1 4H6z"/>
-                </svg>
-            </button>
-            <button class="action-btn" data-action="dislike" title="Dislike">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M17 14V2l-4 4-4-4v12"/>
-                    <path d="M19 18H5l1-4h12z"/>
-                </svg>
-            </button>
-            <button class="action-btn" data-action="share" title="Share">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-                    <polyline points="16,6 12,2 8,6"/>
-                    <line x1="12" y1="2" x2="12" y2="15"/>
-                </svg>
-            </button>
-            <button class="action-btn" data-action="more" title="More">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <circle cx="12" cy="12" r="1"/>
-                    <circle cx="19" cy="12" r="1"/>
-                    <circle cx="5" cy="12" r="1"/>
-                </svg>
-            </button>
-        </div>
-    `;
-    
-    // Create attachments HTML
-    let attachmentsHTML = '';
-    if (message.attachments && message.attachments.length > 0) {
-        attachmentsHTML = '<div class="message-attachments">';
-        
-        for (const attachment of message.attachments) {
-            if (attachment.type === 'image') {
-                attachmentsHTML += `
-                    <div class="message-attachment image-attachment">
-                        <img src="${attachment.data}" alt="${attachment.name}" class="message-image" onclick="openImageModal(this)">
-                        <div class="image-caption">${attachment.name}</div>
-                    </div>
-                `;
-            } else {
-                const fileIcon = await getFileIcon(attachment.fileType);
-                const formattedSize = await formatFileSize(attachment.size);
-                attachmentsHTML += `
-                    <div class="message-attachment file-attachment">
-                        <div class="file-icon">${fileIcon}</div>
-                        <div class="file-info">
-                            <span class="file-name">${attachment.name}</span>
-                            <span class="file-size">${formattedSize}</span>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        attachmentsHTML += '</div>';
-    }
-    
-    if (message.sender === 'user') {
-        // Apply markdown formatting to user messages as well
-        const formattedUserText = message.text ? await formatMarkdown(message.text) : '';
-        wrap.innerHTML = `
-            <div class="message-bubble">
-                ${formattedUserText}
-                ${attachmentsHTML}
-            </div>
-            ${actionButtons}`;
-    } else {
-        // Apply markdown formatting to AI messages
-        const formattedText = await formatMarkdown(message.text);
-        wrap.innerHTML = `
-            <div class="ai-icon message-icon"></div>
-            <div class="message-bubble">
-                ${formattedText}
-                ${message.hasUpgrade ? '<button class="upgrade-btn">Upgrade to Pro</button>' : ''}
-                ${attachmentsHTML}
-            </div>
-            ${actionButtons}`;
-    }
-    
-    // Add event listeners for action buttons
-    const module = await import('../features/message-actions.js');
-    const setupMessageActionListeners = module.setupMessageActionListeners;
-    setupMessageActionListeners(wrap);
-    
-    chatArea.appendChild(wrap);
+    renderMessage(welcomeMessage);
 }
 
 function scrollToBottom() {
@@ -359,20 +254,4 @@ function scrollToBottom() {
     if (chatArea) {
         chatArea.scrollTop = chatArea.scrollHeight;
     }
-}
-
-// Helper function imports (to be resolved at runtime)
-async function formatMarkdown(text) {
-    const { formatMarkdown } = await import('../utils/formatters.js');
-    return formatMarkdown(text);
-}
-
-async function formatFileSize(bytes) {
-    const { formatFileSize } = await import('../utils/dom-helpers.js');
-    return formatFileSize(bytes);
-}
-
-async function getFileIcon(fileType) {
-    const { getFileIcon } = await import('../utils/dom-helpers.js');
-    return getFileIcon(fileType);
 }

@@ -41,7 +41,15 @@ export const formatMarkdown = (text) => {
         if (lines.every(line => line.match(/^\d+\.\s/) || line.trim() === '')) {
             const listItems = lines
                 .filter(line => line.trim())
-                .map(line => line.replace(/^\d+\.\s(.+)$/, '<li>$1</li>'))
+                .map(line => {
+                    const match = line.match(/^(\d+)\.\s(.+)$/);
+                    if (match) {
+                        const number = match[1];
+                        const content = match[2];
+                        return `<li value="${number}">${content}</li>`;
+                    }
+                    return line;
+                })
                 .join('');
             processedBlocks.push(`<ol>${listItems}</ol>`);
         }
