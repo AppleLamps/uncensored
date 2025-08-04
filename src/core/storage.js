@@ -34,50 +34,34 @@ export const clearChatsFromStorage = () => {
     }
 };
 
+// API key functions removed - now handled securely via Supabase Edge Functions
+// These functions are kept as stubs to prevent breaking existing code
 export const getApiKey = () => {
-    return localStorage.getItem(APP_CONSTANTS.STORAGE_KEYS.API_KEY);
+    console.warn('API keys are no longer stored in localStorage for security reasons');
+    return null;
 };
 
 export const setApiKey = (apiKey) => {
-    try {
-        localStorage.setItem(APP_CONSTANTS.STORAGE_KEYS.API_KEY, apiKey);
-        return true;
-    } catch (error) {
-        console.warn('Failed to save API key to localStorage:', error);
-        return false;
-    }
+    console.warn('API keys are no longer stored in localStorage for security reasons');
+    return false;
 };
 
 export const clearApiKey = () => {
-    try {
-        localStorage.removeItem(APP_CONSTANTS.STORAGE_KEYS.API_KEY);
-        return true;
-    } catch (error) {
-        console.warn('Failed to clear API key from localStorage:', error);
-        return false;
-    }
+    console.warn('API keys are no longer stored in localStorage for security reasons');
+    return false;
 };
 
 export const getGetimgApiKey = () => {
-    return localStorage.getItem(APP_CONSTANTS.STORAGE_KEYS.GETIMG_API_KEY);
+    console.warn('API keys are no longer stored in localStorage for security reasons');
+    return null;
 };
 
 export const setGetimgApiKey = (apiKey) => {
-    try {
-        localStorage.setItem(APP_CONSTANTS.STORAGE_KEYS.GETIMG_API_KEY, apiKey);
-        return true;
-    } catch (error) {
-        console.warn('Failed to save GETIMG API key to localStorage:', error);
-        return false;
-    }
+    console.warn('API keys are no longer stored in localStorage for security reasons');
+    return false;
 };
 
 export const clearGetimgApiKey = () => {
-    try {
-        localStorage.removeItem(APP_CONSTANTS.STORAGE_KEYS.GETIMG_API_KEY);
-        return true;
-    } catch (error) {
-        console.warn('Failed to clear GETIMG API key from localStorage:', error);
-        return false;
-    }
+    console.warn('API keys are no longer stored in localStorage for security reasons');
+    return false;
 };

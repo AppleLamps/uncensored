@@ -1,5 +1,4 @@
 import { initializeDarkMode, toggleDarkMode } from './features/dark-mode.js';
-import { getApiKey, setApiKey, clearApiKey, getGetimgApiKey, setGetimgApiKey, clearGetimgApiKey } from './core/storage.js';
 
 // Profile Page Module
 class ProfilePage {
@@ -9,12 +8,10 @@ class ProfilePage {
     }
     
     initializePage() {
-        // Load saved API keys and initialize dark mode on page load
-        this.loadApiKey();
-        this.loadGetimgApiKey();
+        // Initialize dark mode and setup security notice
         initializeDarkMode(this.darkMode);
         this.setupDarkModeToggle();
-        this.setupEventListeners();
+        this.setupSecurityNotice();
     }
     
     setupDarkModeToggle() {
@@ -26,191 +23,95 @@ class ProfilePage {
         }
     }
     
-    setupEventListeners() {
-        // Handle API key form submission
+    setupSecurityNotice() {
+        // Display security notice about API key handling
         const apiKeyForm = document.getElementById('apiKeyForm');
-        if (apiKeyForm) {
-            apiKeyForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.saveApiKey();
-            });
-        }
-        
-        // Handle clear API key button
-        const clearApiKeyBtn = document.getElementById('clearApiKeyBtn');
-        if (clearApiKeyBtn) {
-            clearApiKeyBtn.addEventListener('click', () => {
-                this.clearApiKey();
-            });
-        }
-
-        // Handle GETIMG API key form submission
         const getimgApiKeyForm = document.getElementById('getimgApiKeyForm');
+        
+        if (apiKeyForm) {
+            this.replaceFormWithNotice(apiKeyForm, 'OpenRouter API');
+        }
+        
         if (getimgApiKeyForm) {
-            getimgApiKeyForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.saveGetimgApiKey();
-            });
-        }
-        
-        // Handle clear GETIMG API key button
-        const clearGetimgApiKeyBtn = document.getElementById('clearGetimgApiKeyBtn');
-        if (clearGetimgApiKeyBtn) {
-            clearGetimgApiKeyBtn.addEventListener('click', () => {
-                this.clearGetimgApiKey();
-            });
+            this.replaceFormWithNotice(getimgApiKeyForm, 'GETIMG API');
         }
     }
     
-    loadApiKey() {
-        const savedApiKey = getApiKey();
-        if (savedApiKey) {
-            const apiKeyInput = document.getElementById('apiKeyInput');
-            if (apiKeyInput) {
-                apiKeyInput.value = savedApiKey;
-                this.showStatus('API key loaded successfully', 'success');
+    replaceFormWithNotice(formElement, apiType) {
+        const noticeHTML = `
+            <div class="security-notice">
+                <div class="notice-icon">🔒</div>
+                <h3>Enhanced Security</h3>
+                <p><strong>${apiType} keys are now handled securely on the backend.</strong></p>
+                <p>For your security, API keys are no longer stored in your browser's localStorage. 
+                All API interactions are now processed through secure Supabase Edge Functions.</p>
+                <div class="security-benefits">
+                    <h4>Security Benefits:</h4>
+                    <ul>
+                        <li>✅ API keys never exposed in browser</li>
+                        <li>✅ Secure server-side processing</li>
+                        <li>✅ Protection against XSS attacks</li>
+                        <li>✅ Centralized key management</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+        
+        formElement.innerHTML = noticeHTML;
+        
+        // Add CSS styles for the notice
+        const style = document.createElement('style');
+        style.textContent = `
+            .security-notice {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 2rem;
+                border-radius: 12px;
+                text-align: center;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+                margin: 1rem 0;
             }
-        }
-    }
-    
-    saveApiKey() {
-        const apiKeyInput = document.getElementById('apiKeyInput');
-        if (!apiKeyInput) return;
-        
-        const apiKey = apiKeyInput.value.trim();
-        
-        if (!apiKey) {
-            this.showStatus('Please enter an API key', 'error');
-            return;
-        }
-        
-        // Basic validation for OpenRouter API key format
-        if (!apiKey.startsWith('sk-or-')) {
-            this.showStatus('Invalid API key format. OpenRouter keys start with "sk-or-"', 'error');
-            return;
-        }
-        
-        try {
-            setApiKey(apiKey);
-            this.showStatus('API key saved successfully!', 'success');
-        } catch (error) {
-            this.showStatus('Failed to save API key. Please try again.', 'error');
-        }
-    }
-    
-    clearApiKey() {
-        if (confirm('Are you sure you want to clear your API key?')) {
-            clearApiKey();
-            const apiKeyInput = document.getElementById('apiKeyInput');
-            if (apiKeyInput) {
-                apiKeyInput.value = '';
+            .notice-icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
             }
-            this.showStatus('API key cleared successfully', 'success');
-        }
-    }
-
-    loadGetimgApiKey() {
-        const savedGetimgApiKey = getGetimgApiKey();
-        if (savedGetimgApiKey) {
-            const getimgApiKeyInput = document.getElementById('getimgApiKeyInput');
-            if (getimgApiKeyInput) {
-                getimgApiKeyInput.value = savedGetimgApiKey;
-                this.showGetimgStatus('GETIMG API key loaded successfully', 'success');
+            .security-notice h3 {
+                margin: 0 0 1rem 0;
+                font-size: 1.5rem;
             }
-        }
-    }
-
-    saveGetimgApiKey() {
-        const getimgApiKeyInput = document.getElementById('getimgApiKeyInput');
-        if (!getimgApiKeyInput) return;
-        
-        const getimgApiKey = getimgApiKeyInput.value.trim();
-        
-        if (!getimgApiKey) {
-            this.showGetimgStatus('Please enter a GETIMG API key', 'error');
-            return;
-        }
-        
-        try {
-            setGetimgApiKey(getimgApiKey);
-            this.showGetimgStatus('GETIMG API key saved successfully!', 'success');
-        } catch (error) {
-            this.showGetimgStatus('Failed to save GETIMG API key. Please try again.', 'error');
-        }
-    }
-
-    clearGetimgApiKey() {
-        if (confirm('Are you sure you want to clear your GETIMG API key?')) {
-            clearGetimgApiKey();
-            const getimgApiKeyInput = document.getElementById('getimgApiKeyInput');
-            if (getimgApiKeyInput) {
-                getimgApiKeyInput.value = '';
+            .security-notice p {
+                margin: 0.5rem 0;
+                opacity: 0.9;
             }
-            this.showGetimgStatus('GETIMG API key cleared successfully', 'success');
-        }
-    }
-    
-    showStatus(message, type) {
-        const statusDiv = document.getElementById('apiKeyStatus');
-        const statusText = document.getElementById('statusText');
-        
-        if (!statusDiv || !statusText) return;
-        
-        statusText.textContent = message;
-        statusDiv.style.display = 'block';
-        
-        if (type === 'success') {
-            statusDiv.style.backgroundColor = '#d1fae5';
-            statusDiv.style.color = '#065f46';
-            statusDiv.style.border = '1px solid #a7f3d0';
-        } else {
-            statusDiv.style.backgroundColor = '#fee2e2';
-            statusDiv.style.color = '#991b1b';
-            statusDiv.style.border = '1px solid #fca5a5';
-        }
-        
-        // Hide status after 3 seconds
-        setTimeout(() => {
-            statusDiv.style.display = 'none';
-        }, 3000);
-    }
-
-    showGetimgStatus(message, type) {
-        // Create a temporary status message for GETIMG API key
-        // Since there might not be a dedicated status div, we'll create a simple alert-style notification
-        const getimgForm = document.getElementById('getimgApiKeyForm');
-        if (!getimgForm) return;
-
-        // Remove any existing status message
-        const existingStatus = getimgForm.querySelector('.getimg-status');
-        if (existingStatus) {
-            existingStatus.remove();
-        }
-
-        // Create new status message
-        const statusDiv = document.createElement('div');
-        statusDiv.className = 'getimg-status';
-        statusDiv.textContent = message;
-        statusDiv.style.cssText = `
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            ${type === 'success' 
-                ? 'background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0;' 
-                : 'background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;'
+            .security-benefits {
+                background: rgba(255,255,255,0.1);
+                padding: 1rem;
+                border-radius: 8px;
+                margin-top: 1rem;
+                text-align: left;
+            }
+            .security-benefits h4 {
+                margin: 0 0 0.5rem 0;
+                text-align: center;
+            }
+            .security-benefits ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .security-benefits li {
+                padding: 0.25rem 0;
+                font-size: 0.9rem;
             }
         `;
-
-        getimgForm.appendChild(statusDiv);
-
-        // Hide status after 3 seconds
-        setTimeout(() => {
-            if (statusDiv.parentNode) {
-                statusDiv.remove();
-            }
-        }, 3000);
+        
+        if (!document.querySelector('#security-notice-styles')) {
+            style.id = 'security-notice-styles';
+            document.head.appendChild(style);
+        }
     }
+    
+
 }
 
 // Initialize the profile page when DOM is loaded

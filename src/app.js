@@ -7,7 +7,7 @@ import { switchToChat } from './components/chat-list.js';
 import { setupComposer, handleFileAttach, initializeComposer } from './components/composer.js';
 import { addMessageWithAttachments } from './services/message-service.js';
 import { createNewChat, clearAllChatHistory } from './services/chat-service.js';
-import { getAIResponse } from './services/api.js';
+import { getAIResponse } from './services/secure-api.js';
 import { openImageModal } from './components/modal.js';
 import { autosize } from './utils/dom-helpers.js';
 import { updateSendButtonState } from './utils/file-utils.js';
