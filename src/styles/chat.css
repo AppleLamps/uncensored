@@ -485,18 +485,143 @@
   background: linear-gradient(90deg, transparent, rgba(70, 194, 255, 0.1), transparent);
 }
 
-/* Responsive tweaks for chat */
-@media (max-width:520px){
+/* Mobile Responsive Chat Styles */
+@media (max-width: 768px) {
+  .chat-header {
+    padding: 8px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-logo {
+    height: 40px;
+    max-width: 180px;
+  }
+  
+  .chat-content-wrapper {
+    max-width: 100%;
+  }
+  
+  .chat-area {
+    padding: 16px 12px;
+    gap: 16px;
+  }
+  
+  .message-wrapper {
+    max-width: 100%;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .message-wrapper.ai-message {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+  
+  .message-wrapper.user-message {
+    margin-right: 0;
+    align-self: flex-end;
+  }
+  
+  .message-bubble {
+    padding: 10px 14px;
+    font-size: 14px;
+    max-width: calc(100vw - 80px);
+    word-wrap: break-word;
+  }
+  
+  .ai-message .message-bubble {
+    margin-left: 0;
+    padding: 8px 12px;
+  }
+  
+  .ai-icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+  
+  .message-actions {
+    left: 44px;
+    margin-top: 4px;
+  }
+  
+  .user-message .message-actions {
+    right: 44px;
+    left: auto;
+  }
+  
   .message-attachment {
-    max-width: 250px;
+    max-width: calc(100vw - 100px);
   }
   
   .message-image {
-    max-width: 250px;
+    max-width: calc(100vw - 100px);
+    height: auto;
   }
   
   .message-attachment.file-attachment {
-    max-width: 200px;
+    max-width: calc(100vw - 120px);
     padding: 6px 10px;
+  }
+}
+
+@media (max-width: 520px) {
+  .chat-header {
+    padding: 6px 12px;
+  }
+  
+  .header-logo {
+    height: 36px;
+    max-width: 150px;
+  }
+  
+  .chat-area {
+    padding: 12px 8px;
+    gap: 12px;
+  }
+  
+  .message-wrapper {
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  
+  .message-bubble {
+    padding: 8px 12px;
+    font-size: 14px;
+    max-width: calc(100vw - 60px);
+  }
+  
+  .ai-message .message-bubble {
+    padding: 6px 10px;
+  }
+  
+  .ai-icon {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+  
+  .message-actions {
+    left: 38px;
+  }
+  
+  .user-message .message-actions {
+    right: 38px;
+  }
+  
+  .message-attachment {
+    max-width: calc(100vw - 80px);
+  }
+  
+  .message-image {
+    max-width: calc(100vw - 80px);
+  }
+  
+  .message-attachment.file-attachment {
+    max-width: calc(100vw - 100px);
   }
 }
