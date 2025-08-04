@@ -1,6 +1,6 @@
 import { handleFileSelection, addAttachmentToComposer, updateSendButtonState } from '../utils/file-utils.js';
 import { autosize } from '../utils/dom-helpers.js';
-import { getAIResponse } from '../services/api.js'; // Import getAIResponse
+import { getAIResponse } from '../services/secure-api.js'; // Import getAIResponse from secure API
 
 // Composer Component
 export const setupComposer = () => {

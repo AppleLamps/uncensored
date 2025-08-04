@@ -14,7 +14,7 @@ import { openImageModal } from './components/modal.js';
 // Services
 import { createNewChat, clearAllChatHistory } from './services/chat-service.js';
 import { clearChatArea, addWelcomeMessage, addMessage, addMessageWithAttachments } from './services/message-service.js';
-import { getAIResponse } from './services/api.js';
+import { getAIResponse } from './services/secure-api.js';
 // Features
 import { initializeDarkMode, toggleDarkMode } from './features/dark-mode.js';
 import { setupMessageActionListeners, handleMessageAction } from './features/message-actions.js';
